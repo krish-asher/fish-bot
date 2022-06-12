@@ -379,6 +379,6 @@ async def help(ctx):
 async def AlwaysOnTheGame(ctx, user: discord.Member):
   await  ctx.send(user.status)
 
-
-client.run('ODU0OTAyNzg0ODc5ODg2MzQ2.YMqsQw.i-K9SvEWYhsz8fO6VpMTo2ugjhg')
+#TOKEN is a variable for the token of the bot which allows the bot to run this code.  Because this is public, I have not put it in.
+client.run(TOKEN)
 
