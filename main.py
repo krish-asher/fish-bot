@@ -6,6 +6,7 @@ from discord import Member
 import time
 import requests
 
+chanel_id = #################
 client = commands.Bot(command_prefix="$",intents=discord.Intents.all())
 client.remove_command('help')
 #Events
@@ -22,7 +23,7 @@ async def on_command_error(ctx,error):
   if isinstance(error, commands.MissingRequiredArgument):
     await ctx.send("Pass in all required commands.")
   if isinstance(error, commands.CommandNotFound):
-    await ctx.send("Homie what command are you trying to use?")
+    await ctx.send("Invalid command")
 
 @client.event
 async def on_raw_reaction_add(payload):
@@ -42,20 +43,20 @@ async def on_raw_reaction_add(payload):
                   
                   rip = discord.utils.get(client.get_guild(payload.guild_id).members, id=x['person'])
 
-                  channel = discord.utils.get(client.get_guild(payload.guild_id).channels, id=771800408359436288)
+                  channel = discord.utils.get(client.get_guild(payload.guild_id).channels, id=chanel_id)
 
                   if x['role-id']==0:
                     if x['up-votes']-x['down-votes']>9:
                       invitelink = await channel.create_invite(max_uses=1,unique=True)
-                      await rip.send("YOU GOT KICKED BUDDY :boot:")
+                      await rip.send("You have been kicked")
                       await rip.kick()
-                      await channel.send(f"The homies have decide that {rip.mention} should be kicked.")
+                      await channel.send(f"{rip.mention} has been kicked")
                       x['finished'] = True
 
 
                   elif x['role-id']==1 and x['up-votes']-x['down-votes']>2:
                       await rip.edit(mute = True)
-                      await channel.send(f"The homies have decide that {rip.mention} should be muted.")
+                      await channel.send(f"{rip.mention} ")
                       await rip.send("YOU GOT MUTED MONKEY :monkey:")
                       x['finished'] = True
 
@@ -97,7 +98,7 @@ async def on_raw_reaction_remove(payload):
                 if time.time()-x['time']<600 and x['finished'] == False:              
                   rip = discord.utils.get(client.get_guild(payload.guild_id).members, id=x['person'])
 
-                  channel = discord.utils.get(client.get_guild(payload.guild_id).channels, id=771800408359436288)
+                  channel = discord.utils.get(client.get_guild(payload.guild_id).channels, id=chanel_id)
 
                   if x['role-id']==0:
                     if x['up-votes']-x['down-votes']>9:
@@ -178,7 +179,7 @@ async def del_old_requests():
 """
 @tasks.loop(seconds=60)
 async def check():
-  channel = discord.utils.get(client.get_guild(771789465974734848).channels, id=771800408359436288)
+  channel = discord.utils.get(client.get_guild(771789465974734848).channels, id=chanel_id)
   with open('react.json') as react_file:
     data = json.load(react_file)
     for member in channel.members:
