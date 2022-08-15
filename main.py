@@ -41,29 +41,29 @@ async def on_raw_reaction_add(payload):
                     x['down-votes']+=1
                 if time.time()-x['time']<600 and x['finished'] == False:
                   
-                  rip = discord.utils.get(client.get_guild(payload.guild_id).members, id=x['person'])
+                  person = discord.utils.get(client.get_guild(payload.guild_id).members, id=x['person'])
 
                   channel = discord.utils.get(client.get_guild(payload.guild_id).channels, id=chanel_id)
 
                   if x['role-id']==0:
                     if x['up-votes']-x['down-votes']>9:
                       invitelink = await channel.create_invite(max_uses=1,unique=True)
-                      await rip.send("You have been kicked")
-                      await rip.kick()
-                      await channel.send(f"{rip.mention} has been kicked")
+                      await person.send("You have been kicked")
+                      await person.kick()
+                      await channel.send(f"{person.mention} has been kicked")
                       x['finished'] = True
 
 
                   elif x['role-id']==1 and x['up-votes']-x['down-votes']>2:
-                      await rip.edit(mute = True)
-                      await channel.send(f"{rip.mention} ")
-                      await rip.send("YOU GOT MUTED MONKEY :monkey:")
+                      await person.edit(mute = True)
+                      await channel.send(f"{person.mention} is muted")
+                      await person.send("You are muted")
                       x['finished'] = True
 
                   elif x['role-id']==2 and x['up-votes']-x['down-votes']>2:
-                      await rip.edit(mute = False)
-                      await channel.send(f"The homies have decide that {rip.mention} should be unmuted.")
-                      await rip.send("YOU GOT UNMUTED MONKEY :monkey:")
+                      await person.edit(mute = False)
+                      await channel.send(f"{person.mention} is unmuted")
+                      await person.send("You are unmuted")
                       x['finished'] = True
  
                   else:
@@ -71,16 +71,14 @@ async def on_raw_reaction_add(payload):
                       role = discord.utils.get(client.get_guild(payload.guild_id).roles, id=x['role-id'])
 
                       if(x['type']):
-                        await rip.remove_roles(role)
+                        await person.remove_roles(role)
                         x['finished'] = True
-                        await channel.send(f"The homies have decide that {rip.mention} can be freed.")
-                        await rip.send("YOU GOT FREED BABYBOY :baby:")
+                        await channel.send(f"{person.mention} does not have {role} role")
 
                       else:
-                        await rip.add_roles(role)
+                        await person.add_roles(role)
                         x['finished'] = True
-                        await channel.send(f"The homies have decide that {rip.mention} should be in {role}")
-                        await rip.send("YOU GOT REVOKED BOZO :clown:")
+                        await channel.send(f"{person.mention} does have {role} role")
 
         with open('react.json', 'w') as f:
           json.dump(data, f, indent=4)
@@ -96,28 +94,27 @@ async def on_raw_reaction_remove(payload):
                   if payload.emoji.name=='👎':
                     x['down-votes']-=1
                 if time.time()-x['time']<600 and x['finished'] == False:              
-                  rip = discord.utils.get(client.get_guild(payload.guild_id).members, id=x['person'])
+                  person = discord.utils.get(client.get_guild(payload.guild_id).members, id=x['person'])
 
                   channel = discord.utils.get(client.get_guild(payload.guild_id).channels, id=chanel_id)
 
                   if x['role-id']==0:
                     if x['up-votes']-x['down-votes']>9:
-                      await rip.send("YOU GOT KICKED BUDDY :boot:")
-                      await rip.kick()
-                      await channel.send(f"The homies have decide that {rip.mention} should be kicked.")
+                      await person.kick()
+                      await channel.send(f"{rip.mention} has been kicked.")
                       x['finished'] = True
 
 
                   elif x['role-id']==1 and x['up-votes']-x['down-votes']>2:
-                      await rip.edit(mute = True)
-                      await channel.send(f"The homies have decide that {rip.mention} should be muted.")
-                      await rip.send("YOU GOT MUTED MONKEY :monkey:")
+                      await person.edit(mute = True)
+                      await channel.send(f"{rip.mention} has been muted.")
+                      await person.send("You are muted")
                       x['finished'] = True
 
                   elif x['role-id']==2 and x['up-votes']-x['down-votes']>2:
-                      await rip.edit(mute = False)
-                      await channel.send(f"The homies have decide that {rip.mention} should be unmuted.")
-                      await rip.send("YOU GOT UNMUTED MONKEY :monkey:")
+                      await person.edit(mute = False)
+                      await channel.send(f"{rip.mention} is unmuted")
+                      await person.send("You are unmuted")
                       x['finished'] = True
  
                   else:
@@ -125,17 +122,15 @@ async def on_raw_reaction_remove(payload):
                       role = discord.utils.get(client.get_guild(payload.guild_id).roles, id=x['role-id'])
 
                       if(x['type']):
-                        await rip.remove_roles(role)
+                        await person.remove_roles(role)
                         x['finished'] = True
-                        await channel.send(f"The homies have decide that {rip.mention} can be freed.")
-                        await rip.send("YOU GOT FREED BABYBOY :baby:")
+                        await channel.send(f"{person.mention} does not have {role} role")
 
                       else:
                         await rip.add_roles(role)
                         x['finished'] = True
                         x['time'] = time.time()
-                        await channel.send(f"The homies have decide that {rip.mention} should be in {role}")
-                        await rip.send("YOU GOT REVOKED BOZO :clown:")
+                        await channel.send(f"{person.mention} does not have {role} role")
 
         with open('react.json', 'w') as f:
           json.dump(data, f, indent=4)
@@ -167,9 +162,9 @@ async def del_old_requests():
       t = time.time()
       if t-x['time']>300:
         if(x['type']==False):
-          role = discord.utils.get(client.get_guild(771789465974734848).roles, id=x['role-id'])
-          rip = discord.utils.get(client.get_guild(771789465974734848).members, id=x['person'])
-          await rip.remove_roles(role)
+          role = discord.utils.get(client.get_guild(###################).roles, id=x['role-id'])
+          person = discord.utils.get(client.get_guild(###################).members, id=x['person'])
+          await person.remove_roles(role)
         del data[i]
         i-=1
       i+=1
@@ -179,7 +174,7 @@ async def del_old_requests():
 """
 @tasks.loop(seconds=60)
 async def check():
-  channel = discord.utils.get(client.get_guild(771789465974734848).channels, id=chanel_id)
+  channel = discord.utils.get(client.get_guild(##################).channels, id=chanel_id)
   with open('react.json') as react_file:
     data = json.load(react_file)
     for member in channel.members:
@@ -207,7 +202,7 @@ async def clear(ctx,amount=5):
 
 @client.command()
 async def unrevoke(ctx, user: discord.Member,*,message= ""):
-  emb = discord.Embed(title = "Unrevoke", description=f"Do you want to free the homie {user.mention}? \n {message}")
+  emb = discord.Embed(title = "Unrevoke", description=f"Do you want to unrevoke {user.mention}? \n {message}")
   print(ctx.channel)
   msg = await ctx.channel.send(embed=emb)
   await msg.add_reaction('👍')
@@ -216,7 +211,7 @@ async def unrevoke(ctx, user: discord.Member,*,message= ""):
     data = json.load(json_file)
 
     new_react_role = {
-      'role-id': 771789465974734850, 
+      'role-id': ################, 
       'up-votes': 0,
       'down-votes': 0,
       'person': user.id,
@@ -239,30 +234,7 @@ async def revoke(ctx, user: discord.Member,*, message = ""):
     data = json.load(json_file)
 
     new_react_role = {
-      'role-id': 771789465974734850, 
-      'up-votes': 0,
-      'down-votes': 0,
-      'person': user.id,
-      'message_id': msg.id,
-      'time': time.time(),
-      'type': False,
-      'finished':False
-    }
-    data.append(new_react_role)
-  with open('react.json', 'w') as f:
-    json.dump(data, f, indent=4)
-
-@client.command()
-async def ice(ctx, user: discord.Member,*,message=""):
-  emb = discord.Embed(title = "Buddy on Thin Ice", description=f"Do you want to ice {user.mention}? \n \n{message}")
-  msg = await ctx.channel.send(embed=emb)
-  await msg.add_reaction('👍')
-  await msg.add_reaction('👎')
-  with open('react.json') as json_file:
-    data = json.load(json_file)
-
-    new_react_role = {
-      'role-id': 846238627294216192, 
+      'role-id': ###############, 
       'up-votes': 0,
       'down-votes': 0,
       'person': user.id,
@@ -277,7 +249,7 @@ async def ice(ctx, user: discord.Member,*,message=""):
 
 @client.command()
 async def kick(ctx, user:discord.Member,*,message=""):
-  emb = discord.Embed(title = "Buddy boutta get kicked", description=f"Do you want to kick {user.mention}? \n \n{message}")
+  emb = discord.Embed(title = "Kick", description=f"Do you want to kick {user.mention}? \n \n{message}")
   msg = await ctx.channel.send(embed=emb)
   await msg.add_reaction('👍')
   await msg.add_reaction('👎')
@@ -300,7 +272,7 @@ async def kick(ctx, user:discord.Member,*,message=""):
 
 @client.command()
 async def mute(ctx, user: discord.Member,*,message=""):
-  emb = discord.Embed(title = "Ight Mute Em", description=f"Do you want to mute {user.mention}? \n \n{message}")
+  emb = discord.Embed(title = "Mute", description=f"Do you want to mute {user.mention}? \n \n{message}")
   msg = await ctx.channel.send(embed=emb)
   await msg.add_reaction('👍')
   await msg.add_reaction('👎')
@@ -323,7 +295,7 @@ async def mute(ctx, user: discord.Member,*,message=""):
 
 @client.command()
 async def unmute(ctx, user: discord.Member,*,message=""):
-  emb = discord.Embed(title = "Ight Mute Em", description=f"Do you want to unmute {user.mention}? \n \n{message}")
+  emb = discord.Embed(title = "IUnmute", description=f"Do you want to unmute {user.mention}? \n \n{message}")
   msg = await ctx.channel.send(embed=emb)
   await msg.add_reaction('👍')
   await msg.add_reaction('👎')
@@ -353,7 +325,7 @@ async def free(ctx, user: discord.Member,*,message=""):
       if x['person'] == user.id:
         calc = (x['time']+300)-time.time()
         calc = calc//60
-        await ctx.channel.send(f"A mf named {user.mention} has {calc} minutes left")
+        await ctx.channel.send(f"{user.mention} has {calc} minutes left")
         found = True
     if found == False:
       await ctx.channel.send(f"{user.name} was not found.")
@@ -367,13 +339,12 @@ async def help(ctx):
     colour = discord.Colour.blue()
   )
 
-  emb.add_field(name = "$revoke", value="Revokes a mf if the difference between up votes and down votes is 5 or more", inline=False)
-  emb.add_field(name = "$unrevoke", value="Unrevokes a mf if the difference between up votes and down votes is 5 or more", inline=False)
-  emb.add_field(name = "$kick", value="Kicks a mf if the difference between up votes and down votes is 10 or more", inline=False)
-  emb.add_field(name = "$mute", value="Mutes a mf if the difference between up votes and down votes is 3 or more", inline=False)
-  emb.add_field(name = "$unmute", value="Unmutes a mf if the difference between up votes and down votes is 3 or more", inline=False)
-  emb.add_field(name = "$ice", value="Puts a mf on thin ice if the difference between up votes and down votes is 5 or more", inline=False)
-  emb.add_field(name = "$free", value="Tells you how much time a mfer has left", inline=False)
+  emb.add_field(name = "$revoke", value="Person loses the ability to send messages in channel if up votes minus down votes is greater than 5", inline=False)
+  emb.add_field(name = "$unrevoke", value="Person gains the ability to send messages in channel if up votes minus down votes is greater than 5", inline=False)
+  emb.add_field(name = "$kick", value="Person is kicked if up votes minus down votes is greater than 10", inline=False)
+  emb.add_field(name = "$mute", value="Person is muted if up votes minus down votes is greater than 3", inline=False)
+  emb.add_field(name = "$unmute", value="Person is unmuted if up votes minus down votes is greater than 3", inline=False)
+  emb.add_field(name = "$free", value="Tells person how much time is left", inline=False)
   msg = await ctx.channel.send(embed=emb)
 
 @client.command
