@@ -101,19 +101,19 @@ async def on_raw_reaction_remove(payload):
                   if x['role-id']==0:
                     if x['up-votes']-x['down-votes']>9:
                       await person.kick()
-                      await channel.send(f"{rip.mention} has been kicked.")
+                      await channel.send(f"{person.mention} has been kicked.")
                       x['finished'] = True
 
 
                   elif x['role-id']==1 and x['up-votes']-x['down-votes']>2:
                       await person.edit(mute = True)
-                      await channel.send(f"{rip.mention} has been muted.")
+                      await channel.send(f"{person.mention} has been muted.")
                       await person.send("You are muted")
                       x['finished'] = True
 
                   elif x['role-id']==2 and x['up-votes']-x['down-votes']>2:
                       await person.edit(mute = False)
-                      await channel.send(f"{rip.mention} is unmuted")
+                      await channel.send(f"{person.mention} is unmuted")
                       await person.send("You are unmuted")
                       x['finished'] = True
  
