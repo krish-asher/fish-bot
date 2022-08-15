@@ -127,7 +127,7 @@ async def on_raw_reaction_remove(payload):
                         await channel.send(f"{person.mention} does not have {role} role")
 
                       else:
-                        await rip.add_roles(role)
+                        await person.add_roles(role)
                         x['finished'] = True
                         x['time'] = time.time()
                         await channel.send(f"{person.mention} does not have {role} role")
